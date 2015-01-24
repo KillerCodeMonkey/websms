@@ -1,28 +1,28 @@
 {
-    "name": "websms",
-    "description": "A custom nodejs websms.com sdk for sending text and binary sms",
-    "author": "Bengt Weiße <bengtler@gmail.com>",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/KillerCodeMonkey/websms"
-    },
-    "version": "0.0.1",
-    "keywords": [
-        "nodejs",
-        "websms",
-        "websmscom",
-        "sms",
-        "textmessage"
-    ],
-    "main": "index.js",
-    "scripts": {
-        "preinstall": []
-    },
-    "devDependencies": {
-        "mocha": "2.1.0",
-        "expect.js": "0.3.1"
-    },
-    "engines": {
-        "node":  "0.10.33"
-    }
+  "name": "websms",
+  "description": "A custom nodejs websms.com sdk for sending text and binary sms",
+  "author": "Bengt Weiße <bengtler@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KillerCodeMonkey/websms"
+  },
+  "version": "1.0.0",
+  "keywords": [
+    "nodejs",
+    "websms",
+    "websmscom",
+    "sms",
+    "textmessage"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "preinstall": []
+  },
+  "devDependencies": {
+    "mocha": "2.1.0",
+    "expect.js": "0.3.1"
+  },
+  "engines": {
+    "node": "0.10.33"
+  }
 }
