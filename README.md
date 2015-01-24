@@ -1,9 +1,11 @@
-# websms.js
+websms.js
 =========
 Custom nodejs sdk for websms.com services
 
 This module should be a better and stable implementation of the original websms.com sdk.
 https://websms.com/
+
+No additional dependencies!
 
 ### It is a SMS text/binary messaging tool for node.js
 
