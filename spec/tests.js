@@ -3,6 +3,7 @@ var websms = require('../index.js'),
     expect = require('expect.js'),
     TextMessage,
     Client,
+    InvalidMessage,
     BinaryMessage;
 
 describe('WebSMS', function () {
@@ -64,6 +65,7 @@ describe('WebSMS', function () {
             expect(TextMessage2.error).to.be.an('object');
             expect(TextMessage2.error.cause).to.be('invalidNumber');
             expect(TextMessage2.error.message).to.be('phone numbers should contain max. 15 digits');
+            InvalidMessage = TextMessage2;
             done();
         });
         it('create TextMessage without phones', function (done) {
@@ -155,6 +157,95 @@ describe('WebSMS', function () {
             expect(BinaryMessage2.error).to.be.an('object');
             expect(BinaryMessage2.error.cause).to.be('invalidMessage');
             expect(BinaryMessage2.error.message).to.be('empty message or not of type string');
+            done();
+        });
+    });
+    describe('Client', function () {
+        it('create valid one', function (done) {
+            // overwride _post method to test
+            websms.Client.prototype._post = function (typePath, data) {
+                var content = JSON.stringify(data);
+                var opts = {
+                    path: this.config.basePath + typePath,
+                    method: 'POST',
+                    auth: this.config.username + ':' + this.config.password,
+                    host: this.config.host,
+                    port: this.config.port,
+                    headers: {
+                        'User-Agent': this.config.userAgent,
+                        "Content-Length": Buffer.byteLength(content, 'utf8'),
+                        'Content-Type': this.config.contentType
+                    }
+                };
+                return [opts, content];
+            };
+            Client = new websms.Client('test', '1234');
+            expect(Client.version).to.be('1.0.0');
+            expect(Client.config).to.be.an('object');
+            expect(Client.finished).to.be(false);
+            expect(Object.keys(Client.errorCauses).length).to.be(5);
+            expect(Client.config.username).to.be('test');
+            expect(Client.config.password).to.be('1234');
+            expect(Client.config.host).to.be('api.websms.com');
+            expect(Client.config.port).to.be(443);
+            expect(Client.config.contentType).to.be('application/json;charset=UTF-8');
+            expect(Client.config.basePath).to.be('/json/smsmessaging');
+            expect(Client.config.binaryPath).to.be('/binary');
+            expect(Client.config.textPath).to.be('/text');
+            expect(Client.config.userAgent).not.to.be(undefined);
+            done();
+        });
+        it('send valid text message', function (done) {
+            var results = Client.send(TextMessage, 1, false, function () {});
+            expect(results).to.be.an('object');
+            expect(results.length).to.be(2);
+            expect(results[0]).to.be.an('object');
+            expect(results[0].path).to.be(Client.config.basePath + Client.config.textPath);
+            expect(results[1]).to.be.a('string');
+            done();
+        });
+        it('send invalid message', function (done) {
+            Client.send(InvalidMessage, 1, false, function (errorObject, response) {
+                expect(response).to.be(null);
+                expect(errorObject).not.to.be(undefined);
+                expect(errorObject).to.be.an('object');
+                expect(errorObject.cause).to.be('invalidNumber');
+                expect(errorObject.message).to.be('phone numbers should contain max. 15 digits');
+                done();
+            });
+        });
+        it('invalid callback', function (done) {
+            var result = Client.send(TextMessage, 1, false, 'möp');
+            expect(result).to.be(undefined);
+            done();
+        });
+        it('invalid isTest', function (done) {
+            Client.send(TextMessage, 1, 'möp', function (errorObject, response) {
+                expect(response).to.be(null);
+                expect(errorObject).not.to.be(undefined);
+                expect(errorObject).to.be.an('object');
+                expect(errorObject.cause).to.be('parameter');
+                expect(errorObject.message).to.be('invalid type of parameter isTest - should be boolean');
+                done();
+            });
+        });
+        it('invalid smsMaxSmsPerMessage', function (done) {
+            Client.send(TextMessage, 0, false, function (errorObject, response) {
+                expect(response).to.be(null);
+                expect(errorObject).not.to.be(undefined);
+                expect(errorObject).to.be.an('object');
+                expect(errorObject.cause).to.be('parameter');
+                expect(errorObject.message).to.be('Number of maxSmsPerMessage has to be between 0 and 256');
+                done();
+            });
+        });
+        it('send valid binary message', function (done) {
+            var results = Client.send(BinaryMessage, 1, false, function () {});
+            expect(results).to.be.an('object');
+            expect(results.length).to.be(2);
+            expect(results[0]).to.be.an('object');
+            expect(results[0].path).to.be(Client.config.basePath + Client.config.binaryPath);
+            expect(results[1]).to.be.a('string');
             done();
         });
     });
