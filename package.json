@@ -1,6 +1,6 @@
 {
     "name": "websms",
-    "description": "A custom nodejs websms.com sdk",
+    "description": "A custom nodejs websms.com sdk for sending text and binary sms",
     "author": "Bengt Weiße <bengtler@gmail.com>",
     "repository": {
         "type": "git",
@@ -10,15 +10,17 @@
     "keywords": [
         "nodejs",
         "websms",
-        "websmscom"
+        "websmscom",
+        "sms",
+        "textmessage"
     ],
     "main": "index.js",
     "scripts": {
         "preinstall": []
     },
-    "dependencies": {
-    },
     "devDependencies": {
+        "mocha": "2.1.0",
+        "expect.js": "0.3.1"
     },
     "engines": {
         "node":  "0.10.33"
