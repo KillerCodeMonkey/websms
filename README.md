@@ -1,4 +1,4 @@
-websms.js
+websms.js [![Build Status](https://travis-ci.org/KillerCodeMonkey/websms.svg?branch=master)](https://travis-ci.org/KillerCodeMonkey/websms)
 =========
 Custom nodejs sdk for websms.com services
 
