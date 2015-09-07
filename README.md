@@ -152,3 +152,7 @@ Classes
      Message.setClientMessageId(clientMessageId)
      Message.getPriority()
      Message.setPriority(priority)
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/KillerCodeMonkey/websms/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
